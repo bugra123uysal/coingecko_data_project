@@ -1,23 +1,25 @@
 import pandas as pd
-import yfinance as yf
+import requests
 import time
 from datetime import datetime
 
-stock=["AAPL","TSLA","MSFT" ]
-
+stock = ["bitcoin", "ethereum", "solana", "tether", "binancecoin"]
 while True:
-    for symbol in stock:
+     prices=[]
+     for symbol in stock:
+         url=f"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd"
+         aa =requests.get(url).json()
+         price=aa[symbol]['usd']
+         print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f}")
+         prices.append([datetime.now(), symbol, price ])
+    
+     df=pd.DataFrame(prices, columns=["Data", "Price", "Coin"])
+     df.to_csv("crypto_prc.csv", mode='w' ,header=True , index=False  )
 
-     aa=yf.Ticker(symbol)
-     bb=aa.history(period="1d", interval="1m")
-     
-      
-      #en son satırır alır
-     last_row=bb.tail(1)
-     if not last_row.empty: 
 
-        print(f"[{datetime.now().strftime('%y-%m-%d %H:%M:%S')}] {symbol} Fiyat: {last_row['Close'].values[0]:.2f}USD")
-       
-     else:
-       print("tekrar deneyiniz")
-    time.sleep(60)
+
+     time.sleep(60)
+
+
+
+
