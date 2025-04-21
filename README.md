@@ -1,1 +1,1 @@
-stock prices withdrawn from yfinance
+Data was retrieved from CoinGecko API and saved to csv file 
