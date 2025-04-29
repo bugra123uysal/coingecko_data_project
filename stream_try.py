@@ -2,6 +2,10 @@ import pandas as pd
 import requests
 import time
 from datetime import datetime
+import psycopg2
+
+
+
 
 stock = [ "bitcoin", "ethereum", "tether", "binancecoin", "solana",
     "ripple", "usd-coin", "cardano", "avalanche-2", "dogecoin",
@@ -17,18 +21,26 @@ while True:
      try:
       
       prices=[]
-      idy=",".join(stock)
-      url=f"https://api.coingecko.com/api/v3/simple/price?ids={idy}&vs_currencies=usd"
+      idy=",".join(stock) 
+      url=f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={idy}"
       data=requests.get(url).json()
-      for symbol in stock:     
-            if symbol in data:                                                                                                                                                                                 
-                 price=data[symbol]['usd']
-                 print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f}")
-                 prices.append([datetime.now(), symbol, price ])    
+      for coin in data: 
+              
+             symbol=coin.get("id") #adı
+             price=coin.get("current_price") #fiyatı
+             hours_24_change=coin.get("price_change_percentage_24h") #24 saatlik fiytat değişimi
+             high=coin.get("high_24h") #24 saatdeki en yüksek fiyat
+             low=coin.get("low_24h")#24 saatdeki en düşük fiyat
+             volume=coin.get("total_volume")# 24 saatdeki işlem saati
+             market_cap=coin.get("market_cap")#piyasa değeri
+
+            
+                 
+             print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f} 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
+             prices.append([datetime.now(), symbol, price,hours_24_change,high, low, volume ,market_cap ])    
      
-            else:
-                print("sorun oluştu sorun için şimdiden özür dileriz")       
-      df=pd.DataFrame(prices, columns=["Data", "Price", "Coin"])
+                 
+      df=pd.DataFrame(prices, columns=["Data", "Price", "Coin","hours_24_change","high", "low","volum","market_cap"])
       df.to_csv("crypto_prc.csv", mode='w' ,header=True , index=False  )
 
 
