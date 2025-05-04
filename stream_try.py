@@ -2,8 +2,22 @@ import pandas as pd
 import requests
 import time
 from datetime import datetime
+from sqlalchemy import create_engine
 import psycopg2
 
+con=psycopg2.connect(
+#psql bağlanama
+host="localhost",
+port=5432,
+database="crypto_prices",
+user="postgres",
+password="4516"
+)
+
+cc=con.cursor()
+
+# sqlalchemy bağlantı mororu
+engine=create_engine("postgresql://postgres:4516@localhost:5432/crypto_prices")
 
 
 
@@ -37,12 +51,16 @@ while True:
             
                  
              print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f} 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
-             prices.append([datetime.now(), symbol, price,hours_24_change,high, low, volume ,market_cap ])    
+             prices.append([datetime.now(), symbol, price, hours_24_change, high, low, volume, market_cap])    
      
                  
-      df=pd.DataFrame(prices, columns=["Data", "Price", "Coin","hours_24_change","high", "low","volum","market_cap"])
-      df.to_csv("crypto_prc.csv", mode='w' ,header=True , index=False  )
+      df=pd.DataFrame(prices, columns=["Date", "Coin", "Price", "hours_24_change", "high", "low", "volume", "market_cap"])
+    
 
+      df.to_csv("crypto_prc.csv", mode='a' ,header=True , index=False  )
+      
+      # dataframe yi postgresql e aktar 
+      df.to_sql("crypto_prices", engine, if_exists="append", index=False)
 
       time.sleep(60)
 
