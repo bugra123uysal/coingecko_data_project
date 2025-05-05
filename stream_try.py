@@ -38,6 +38,7 @@ while True:
       idy=",".join(stock) 
       url=f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={idy}"
       data=requests.get(url).json()
+ 
       for coin in data: 
               
              symbol=coin.get("id") #adı
@@ -48,19 +49,47 @@ while True:
              volume=coin.get("total_volume")# 24 saatdeki işlem saati
              market_cap=coin.get("market_cap")#piyasa değeri
 
+             """ kolon ekleme """
+            
+            
+
             
                  
              print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f} 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
-             prices.append([datetime.now(), symbol, price, hours_24_change, high, low, volume, market_cap])    
+            
+             prices.append([datetime.now(), symbol, year ,month,weekday,day , price, hours_24_change, high, low, volume, market_cap])   
+            
      
                  
-      df=pd.DataFrame(prices, columns=["Date", "Coin", "Price", "hours_24_change", "high", "low", "volume", "market_cap"])
+      df=pd.DataFrame(prices, columns=["Date","year","month","weekday","day", "Coin", "Price", "hours_24_change", "high", "low", "volume", "market_cap",])
+      
+      
+             #datetime a donuşturme
+      df['date']=pd.to_datetime(df['date'])
+      year= df['year']=  df['date'].dt.year
+      month=df['month']=  df['date'].dt.month
+      weekday=df['weekday']=  df['date'].dt.weekday
+      day= df['day']=  df['date'].dt.day
+
+      if df.isnull().sum().sum()==0:
+           
+           print("eksik veri var ") 
+      else:
+          df.dropna(inplace=True)
+     
+      
+          
+     
+      print(df.info())
+      print(df.describe())
     
 
       df.to_csv("crypto_prc.csv", mode='a' ,header=True , index=False  )
       
       # dataframe yi postgresql e aktar 
-      df.to_sql("crypto_prices", engine, if_exists="append", index=False)
+      df.to_sql("crypto_prices", engine, if_exists="replace", index=False)
+
+             
 
       time.sleep(60)
 
