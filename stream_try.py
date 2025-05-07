@@ -36,7 +36,7 @@ while True:
       
       prices=[]
       idy=",".join(stock) 
-      url=f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={idy}"
+      url=f"https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={idy}&price_change_percentage=7d,30d,1y"
       data=requests.get(url).json()
  
       for coin in data: 
@@ -48,28 +48,22 @@ while True:
              low=coin.get("low_24h")#24 saatdeki en düşük fiyat
              volume=coin.get("total_volume")# 24 saatdeki işlem saati
              market_cap=coin.get("market_cap")#piyasa değeri
+             price_change_1y=coin.get("price_change_percentage_1y_in_currency")
+             price_change_30d=coin.get("price_change_percentage_30d_in_currency")
+             price_change_7d=coin.get("price_change_percentage_7d_in_currency")
 
-             """ kolon ekleme """
-            
-            
-
+           
             
                  
-             print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f} 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
+             print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f},${price_change_1y:.2f},${price_change_30d:.2f},${price_change_7d:.2f} , 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
             
-             prices.append([datetime.now(), symbol, year ,month,weekday,day , price, hours_24_change, high, low, volume, market_cap])   
+             prices.append([datetime.now(), symbol,  price, price_change_1y, price_change_30d, price_change_7d, hours_24_change, high, low, price_change_1y,volume, market_cap])   
             
      
-                 
-      df=pd.DataFrame(prices, columns=["Date","year","month","weekday","day", "Coin", "Price", "hours_24_change", "high", "low", "volume", "market_cap",])
+            
+      df=pd.DataFrame(prices, columns=["Date", "Coin", "Price","price_change_1y","price_change_30d","price_change_7d", "hours_24_change", "high", "low","price_change_1y" , "volume", "market_cap"])
       
-      
-             #datetime a donuşturme
-      df['date']=pd.to_datetime(df['date'])
-      year= df['year']=  df['date'].dt.year
-      month=df['month']=  df['date'].dt.month
-      weekday=df['weekday']=  df['date'].dt.weekday
-      day= df['day']=  df['date'].dt.day
+     
 
       if df.isnull().sum().sum()==0:
            
@@ -84,10 +78,10 @@ while True:
       print(df.describe())
     
 
-      df.to_csv("crypto_prc.csv", mode='a' ,header=True , index=False  )
+      df.to_csv("crypto_prc.csv", mode='w' ,header=True , index=False  )
       
       # dataframe yi postgresql e aktar 
-      df.to_sql("crypto_prices", engine, if_exists="replace", index=False)
+      df.to_sql("crypto_prices", engine, if_exists="append", index=False)
 
              
 
