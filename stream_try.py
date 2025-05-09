@@ -83,11 +83,8 @@ while True:
       # dataframe yi postgresql e aktar 
       df.to_sql("crypto_prices", engine, if_exists="append", index=False)
 
-             
-
-      time.sleep(60)
 
 
      except Exception as e:                                                                                                                                                                  
       print("tekrar deneyiniz : " , e)
-      time.sleep(60)
+      time.sleep(600)
