@@ -40,6 +40,7 @@ while True:
       data=requests.get(url).json()
  
       for coin in data: 
+             now=datetime.now()
               
              symbol=coin.get("id") #adı
              price=coin.get("current_price") #fiyatı
@@ -51,17 +52,20 @@ while True:
              price_change_1y=coin.get("price_change_percentage_1y_in_currency")
              price_change_30d=coin.get("price_change_percentage_30d_in_currency")
              price_change_7d=coin.get("price_change_percentage_7d_in_currency")
+             year= now.year
+             month=now.month
+             day=now.day
 
            
             
                  
-             print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}] {symbol.capitalize()}: ${price:.2f},${price_change_1y:.2f},${price_change_30d:.2f},${price_change_7d:.2f} , 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
+             print(f"[{datetime.now().strftime('%Y-%m-%d  %H:%M:%S')}]yıl: {year} ay:{month} gün:{day}  {symbol.capitalize()}: ${price:.2f},${price_change_1y:.2f},${price_change_30d:.2f},${price_change_7d:.2f} , 24 Saatlik Değişim: {hours_24_change}%, En Yüksek: {high}, En Düşük: {low}, Hacim: {volume}, Piyasa Değeri: {market_cap} ")
             
-             prices.append([datetime.now(), symbol,  price, price_change_1y, price_change_30d, price_change_7d, hours_24_change, high, low, price_change_1y,volume, market_cap])   
+             prices.append([datetime.now(), symbol, year, month, day ,  price, price_change_1y, price_change_30d, price_change_7d, hours_24_change, high, low, price_change_1y,volume, market_cap])   
             
      
             
-      df=pd.DataFrame(prices, columns=["Date", "Coin", "Price","price_change_1y","price_change_30d","price_change_7d", "hours_24_change", "high", "low","price_change_1y" , "volume", "market_cap"])
+      df=pd.DataFrame(prices, columns=["Date", "Coin","year","month","day",  "Price","price_change_1y","price_change_30d","price_change_7d", "hours_24_change", "high", "low","price_change_1y" , "volume", "market_cap"])
       
      
 
@@ -81,10 +85,10 @@ while True:
       df.to_csv("crypto_prc.csv", mode='w' ,header=True , index=False  )
       
       # dataframe yi postgresql e aktar 
-      df.to_sql("crypto_prices", engine, if_exists="append", index=False)
+      df.to_sql("crypto_prc.csv", engine, if_exists="append", index=False)
 
 
 
      except Exception as e:                                                                                                                                                                  
       print("tekrar deneyiniz : " , e)
-      time.sleep(600)
+      time.sleep(60)
