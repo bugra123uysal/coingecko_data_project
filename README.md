@@ -1,30 +1,4 @@
-Data was retrieved from CoinGecko API and saved to csv file 
-<<<<<<< HEAD
-Bu Python projesi, CoinGecko API'si üzerinden birçok kripto paranın fiyat, hacim, piyasa değeri ve fiyat değişim yüzdelerini (7 gün, 30 gün, 1 yıl) belirli aralıklarla alarak PostgreSQL veritabanına kaydeder.
-
----
-
-## 🚀 Özellikler
-
-- Anlık fiyat verisi çekme (`current_price`)
-- 24 saatlik en yüksek, en düşük ve yüzdesel değişim verileri
-- 7 gün, 30 gün ve 1 yıllık fiyat değişim yüzdeleri
-- CoinGecko API kullanımı
-- Verilerin PostgreSQL veritabanına otomatik aktarımı
-- CSV dosyasına yedekleme (append modunda)
-=======
-
-Data was retrieved from CoinGecko API and saved to csv file Bu Python projesi, CoinGecko API'si üzerinden birçok kripto paranın fiyat, hacim, piyasa değeri ve fiyat değişim yüzdelerini (7 gün, 30 gün, 1 yıl) belirli aralıklarla alarak PostgreSQL veritabanına kaydeder.
-
-🚀 Özellikler
-Anlık fiyat verisi çekme (current_price)
-24 saatlik en yüksek, en düşük ve yüzdesel değişim verileri
-7 gün, 30 gün ve 1 yıllık fiyat değişim yüzdeleri
-CoinGecko API kullanımı
-Verilerin PostgreSQL veritabanına otomatik aktarımı
-CSV dosyasına yedekleme (append modunda)
-
-
+Bu Python projesi, CoinGecko API'si üzerinden birçok kripto paranın fiyat, hacim, piyasa değeri ve fiyat değişim yüzdelerini (7 gün, 30 gün, 1 yıl) belirli aralıklarla alarak PostgreSQL veritabanına ve csv dosyasına kaydeder.
 
 Toplanan Veriler
 Her coin için aşağıdaki veriler toplanır:
@@ -48,4 +22,24 @@ low: 24 saatteki en düşük fiyat
 volume: 24 saatlik işlem hacmi
 
 market_cap: Güncel piyasa değeri
->>>>>>> 738b43c ( Description of columns in the data set)
+
+## 🚀 Özellikler
+
+- Anlık fiyat verisi çekme (`current_price`)
+- 24 saatlik en yüksek, en düşük ve yüzdesel değişim verileri
+- 7 gün, 30 gün ve 1 yıllık fiyat değişim yüzdeleri
+- CoinGecko API kullanımı
+- Verilerin PostgreSQL veritabanına otomatik aktarımı
+- CSV dosyasına yedekleme (append modunda)
+-pgAdmin4 kullanılıyor
+
+## kütüphane
+-import pandas as pd (  veri analizi ve veri işleme için kullanılır)
+-import requests  (API'sine istek göndermek ve kripto para verilerini JSON formatında almak için kullanılır)
+-import time   (Programın belirli aralıklarla çalışmasını sağlamak için kullanılır.  time.sleep(60) )
+-from datetime import datetime  (Anlık tarih ve saat bilgisini almak için kullanılır. ve Her veri kaydının hangi yıl, ay, gün ve saat alındığını belirlemek için datetime.now() kullanılır.)
+
+-from sqlalchemy import create_engine  (Pandas ile doğrudan PostgreSQL veritabanına veri yazmak için create_engine() fonksiyonu kullanılır.)
+-import psycopg2 (SQL sorguları yazmak, tabloları manuel kontrol etmek veya veritabanı üzerinde işlemler yapmak için kullanılır.)
+
+
