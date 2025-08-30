@@ -1,4 +1,4 @@
-Bu Python projesi, CoinGecko API'si üzerinden birçok kripto paranın fiyat, hacim, piyasa değeri ve fiyat değişim yüzdelerini (7 gün, 30 gün, 1 yıl) belirli aralıklarla alarak PostgreSQL veritabanına ve csv dosyasına kaydeder.
+Bu Python projesi, CoinGecko API'si üzerinden birçok kripto paranın fiyat, hacim, piyasa değeri ve fiyat değişim yüzdelerini (7 gün, 30 gün, 1 yıl) manuel olarak güncellenmektedir PostgreSQL veritabanına ve csv dosyasına kaydeder.
 
 ##  Toplanan Veri Özellikleri
 
